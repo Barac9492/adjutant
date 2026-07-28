@@ -7,12 +7,14 @@ Not a framework. Fork it, configure it, make it yours.*
 > automation stack. It hasn't been through its own private beta yet — see
 > `docs/ARCHITECTURE.md` for what's shipped vs. roadmapped.
 
-<!-- TODO before public launch:
-     1. GIF here of a `/board convene` session arguing a staged/resolved
-        decision (never a live one — see docs/ARCHITECTURE.md).
-     2. Screenshot of a real morning briefing.
-     Do not launch without these — "beautified README" without receipts
-     is exactly the failure mode this project exists to avoid. -->
+![The board convening on a staged decision — real model output, fictional scenario](docs/assets/demo.gif)
+
+*The board arguing about a fictional decision (a fabricated "Jordan" scenario,
+not anyone's real deliberation — see the demo-asset rule in
+`docs/ARCHITECTURE.md`). The text is genuine output from the actual
+`os/agents/board-*.md` prompts in this repo, not scripted copy.*
+
+<!-- TODO before public launch: a screenshot of a real morning briefing. -->
 
 ## What this is
 

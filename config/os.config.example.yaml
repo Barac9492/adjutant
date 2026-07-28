@@ -1,0 +1,77 @@
+# agent-os configuration — copy to os.config.yaml and fill in.
+# os.config.yaml is gitignored; NEVER commit your filled-in copy.
+# The /setup wizard writes this file for you interactively — editing
+# by hand is only needed if you skip the wizard or want to tweak later.
+
+identity:
+  name: ""                      # your name, used in first-person prompts
+  timezone: "Asia/Seoul"        # IANA tz — resolves "today"/"this week" for all skills
+  language: "en"                # "en" | "ko" | "auto" (match source content)
+
+# Where your durable knowledge lives. If you don't use a notes vault,
+# leave vault_path empty — skills that need it will say so and skip.
+vault:
+  path: ""                      # e.g. "/Users/you/Documents/Notes"
+  index_file: ""                # e.g. "index.md" — your vault's table-of-contents note
+
+# Decision Ledger — one file per open decision, YAML frontmatter.
+decisions:
+  ledger_path: ""               # e.g. "{vault.path}/Decisions"
+  board_minutes_path: ""        # e.g. "{vault.path}/Decisions/_board"
+
+# Notification channel. Only one is required to get value from this OS.
+channels:
+  telegram:
+    enabled: false
+    chat_id: ""                 # NEVER hardcode this in a skill file — read from here
+  email:
+    enabled: false
+    draft_only: true            # hard default — this OS never sends email on your behalf
+
+# The Board — three adversarial seats. Only the veteran needs per-user
+# tuning (the pragmatist and operator roles are domain-independent by
+# design — see os/agents/board-pragmatist.md and board-operator.md for
+# their fixed personas). Override the veteran's domain to match your field.
+board:
+  veteran:
+    domain: "your industry"     # e.g. "venture capital", "enterprise sales"
+  memory_backend: "local"       # "local" (flat files in decisions.board_minutes_path) | "nessie" (if installed)
+
+# Scheduled agents this OS ships. `skill` is the exact os/skills/<dir> (or
+# skill subcommand) each entry runs — kept explicit here because the config
+# key and the skill directory name are not always identical.
+# Wire these into your own scheduler (cron, Claude Code scheduled tasks, etc.)
+# — this repo does not install a scheduler for you. See docs/cookbook/scheduling.md.
+agents:
+  briefing_morning:
+    skill: "briefing-morning"   # os/skills/briefing-morning/SKILL.md
+    enabled: true
+    schedule: "0 7 * * *"       # daily 7am
+  followups:
+    skill: "followups"
+    enabled: false
+    schedule: "0 9 * * *"
+  meeting_prep:
+    skill: "meeting-prep"
+    enabled: false
+    schedule: "*/30 8-18 * * 1-5"
+  email_triage:
+    skill: "email-triage"
+    enabled: false
+    schedule: "0 8,13,18 * * *"
+  weekly_synthesis:
+    skill: "weekly-synthesis"
+    enabled: false
+    schedule: "0 17 * * 5"      # Friday 5pm
+  decision_ledger_review:
+    skill: "decide"             # runs `/decide weekly`, not a standalone skill dir
+    enabled: false
+    schedule: "0 8 * * 1"       # Monday 8am
+  orchestrator:
+    skill: "orchestrator"
+    enabled: false
+    schedule: "0 6 * * *"       # before briefing_morning, so its synthesis can feed it
+  health_check:
+    skill: "health-check"
+    enabled: false              # turn on once 2+ other agents above are enabled
+    schedule: "0 18 * * *"

@@ -12,7 +12,9 @@ Not a framework. Fork it, configure it, make it yours.*
 *The board arguing about a fictional decision (a fabricated "Jordan" scenario,
 not anyone's real deliberation — see the demo-asset rule in
 `docs/ARCHITECTURE.md`). The text is genuine output from the actual
-`os/agents/board-*.md` prompts in this repo, not scripted copy.*
+`os/agents/board-*.md` prompts in this repo, not scripted copy — shown here
+as it appears in-session; the actual minutes file it also produces follows
+the single-file format in `docs/decision-format.md`.*
 
 ![A morning briefing delivered via Telegram — real model output, fictional scenario](docs/assets/briefing.png)
 
@@ -22,7 +24,7 @@ one short message, not a dashboard.*
 
 ## What this is
 
-Sixteen-plus scheduled agents, an adversarial three-seat board that argues
+Seven scheduled agents, an adversarial three-seat board that argues
 about your open decisions and remembers what it told you last time, a
 Decision Ledger that refuses to let you re-analyze the same choice forever,
 and the barbell pipeline (cheap scout → your best model plans → cheap build →
@@ -88,9 +90,11 @@ See `docs/ARCHITECTURE.md` for the full extraction rationale and
 `examples/verticals/` has a worked example of retuning the board and ledger
 for a specific domain (currently: venture capital — `vc.md`). More verticals
 are welcome via PR; see `CONTRIBUTING.md`. The board's veteran seat is the
-one piece most worth customizing — `board.veteran.domain` in your config is
-a start, but a truly sharp veteran usually needs a rewritten persona note in
-`os/agents/board-veteran.md`, not just a filled-in field.
+one piece most worth customizing — `board.veteran.domain` in your config
+gets you most of the way there (see `vc.md` for how far a single field goes).
+If you want more than that — a distinct voice, not just a distinct frame of
+reference — rewrite the persona note directly in
+`os/agents/board-veteran.md`.
 
 ## License
 

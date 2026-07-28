@@ -28,7 +28,7 @@ weekly-synthesis, health-check, briefing-morning). See `docs/ARCHITECTURE.md`.
 Anything that only makes sense as one specific person's life — a personal AI
 companion tied to one calendar and one history, deeply vertical tools (a
 specific industry's deal-sourcing logic), anything entangled with a specific
-employer or organization. If you build one of these on top of agent-os,
+employer or organization. If you build one of these on top of adjutant,
 `examples/verticals/` is the place to show it off as a worked example — not
 core.
 

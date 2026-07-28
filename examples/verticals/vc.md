@@ -1,6 +1,6 @@
 # Vertical example: venture capital
 
-A worked example of tuning agent-os for VC work. This is illustrative —
+A worked example of tuning adjutant for VC work. This is illustrative —
 invented example content, not anyone's real portfolio or decisions — meant
 to show *what kind of customization* is useful, not to be copy-pasted
 verbatim into your own config.

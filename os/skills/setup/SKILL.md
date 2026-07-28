@@ -5,7 +5,7 @@ user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, Glob
 ---
 
-# agent-os Setup Wizard
+# adjutant Setup Wizard
 
 This is the entire onboarding experience — if it fails to produce a working
 config, nothing else in this OS works. Be fast, be concrete, don't ask

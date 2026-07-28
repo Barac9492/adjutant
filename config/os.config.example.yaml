@@ -1,4 +1,4 @@
-# agent-os configuration — copy to os.config.yaml and fill in.
+# adjutant configuration — copy to os.config.yaml and fill in.
 # os.config.yaml is gitignored; NEVER commit your filled-in copy.
 # The /setup wizard writes this file for you interactively — editing
 # by hand is only needed if you skip the wizard or want to tweak later.

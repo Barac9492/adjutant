@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# agent-os installer — copies the os/ tree into ~/.claude and launches setup.
+# adjutant installer — copies the os/ tree into ~/.claude and launches setup.
 set -euo pipefail
 
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "agent-os installer"
+echo "adjutant installer"
 echo "  source: $REPO_DIR/os"
 echo "  target: $CLAUDE_DIR"
 echo
@@ -20,7 +20,7 @@ mkdir -p "$CLAUDE_DIR/agents" "$CLAUDE_DIR/skills"
 copy_with_check() {
   local src="$1" dst="$2" kind="$3"
   if [ -e "$dst" ]; then
-    echo "  skip (exists): $kind/$(basename "$dst") — remove it first if you want agent-os's version"
+    echo "  skip (exists): $kind/$(basename "$dst") — remove it first if you want adjutant's version"
   else
     cp -R "$src" "$dst"
     echo "  installed: $kind/$(basename "$dst")"

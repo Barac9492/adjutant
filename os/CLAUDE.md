@@ -1,7 +1,7 @@
-# agent-os constitution
+# adjutant constitution
 
 This file is your operating doctrine. It is read at the start of every session
-in a repo that has agent-os installed. Keep it — deleting it doesn't remove
+in a repo that has adjutant installed. Keep it — deleting it doesn't remove
 the philosophy, it just makes you re-explain it to yourself every time.
 
 ## 1. Plan before you build

@@ -1,4 +1,4 @@
-# agent-os
+# adjutant
 
 *1년간 실제 업무에 써온 AI 비서 시스템 — 오픈소스로 공개합니다.
 프레임워크가 아닙니다. 포크해서, 설정하고, 당신 것으로 만드세요.*
@@ -27,7 +27,7 @@
 ## 빠른 시작
 
 ```bash
-git clone <this-repo> agent-os && cd agent-os
+git clone <this-repo> adjutant && cd adjutant
 ./install.sh
 ```
 

@@ -1,4 +1,4 @@
-# agent-os
+# adjutant
 
 *A working AI chief of staff, running for a year on real work — open-sourced.
 Not a framework. Fork it, configure it, make it yours.*
@@ -35,7 +35,7 @@ everything after that is yours to shape.
 ## Quickstart
 
 ```bash
-git clone <this-repo> agent-os && cd agent-os
+git clone <this-repo> adjutant && cd adjutant
 ./install.sh
 ```
 

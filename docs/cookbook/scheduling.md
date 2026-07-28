@@ -1,6 +1,6 @@
 # Wiring up the scheduler
 
-agent-os ships the *what* (skills, agents, config) but not the *when*. You
+adjutant ships the *what* (skills, agents, config) but not the *when*. You
 need something to actually fire each enabled skill on its `schedule` (a
 standard cron expression in `config/os.config.yaml`). Pick whichever matches
 your setup:
@@ -19,7 +19,7 @@ crontab entry works:
 
 ```bash
 # crontab -e
-0 7 * * * cd /path/to/your/agent-os-installed-project && claude -p "/briefing" >> ~/agent-os.log 2>&1
+0 7 * * * cd /path/to/your/adjutant-installed-project && claude -p "/briefing" >> ~/adjutant.log 2>&1
 ```
 
 Match the minute/hour to each skill's `schedule` field in your config. This

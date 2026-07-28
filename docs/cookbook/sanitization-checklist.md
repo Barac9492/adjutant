@@ -4,9 +4,23 @@ Run before every merge to `main`, and wire into CI as a blocking check:
 
 ```bash
 grep -rniE \
-  "@[a-zA-Z0-9.-]+\.(com|net|org|io|kr)|telegram.*chat_id.*[0-9]{6,}" \
+  "@[a-zA-Z0-9.-]+\.(com|net|org|io|kr)|chat_id[[:space:]]*:[[:space:]]*[\"']?[0-9]{6,}" \
   --include="*.md" --include="*.yaml" --include="*.sh" .
 ```
+
+Note the `chat_id` branch matches on `chat_id:` alone, not `telegram.*chat_id` on
+one line — this repo's own config schema
+(`config/os.config.example.yaml`) nests them on separate lines:
+```yaml
+channels:
+  telegram:
+    chat_id: "987654321"
+```
+An earlier version of this regex required `telegram` and `chat_id` on the
+same line and missed this exact realistic shape — verified by testing it
+against the schema above (zero matches on a clearly-real-looking ID).
+Requiring the context word made the check look thorough while not actually
+covering the codebase it exists to protect.
 
 Plus a project-specific name/company/org sweep list — keep one in this file,
 updated whenever a contributor's PR reveals a new category worth blocking

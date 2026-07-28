@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# adjutant installer — copies the os/ tree into ~/.claude and launches setup.
+# adjutant installer — copies the os/ tree into ~/.claude, then tells you
+# to run /setup yourself (it doesn't launch Claude Code for you).
 set -euo pipefail
 
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"

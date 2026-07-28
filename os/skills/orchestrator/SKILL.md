@@ -6,6 +6,14 @@ user-invocable: true
 
 # Orchestrator — Signal Mesh
 
+**Overlaps with `briefing-morning`** — both synthesize "what matters today"
+into one Telegram message. If you enable both, either stagger them enough to
+tell apart (orchestrator earlier, briefing-morning later) and treat one as
+the deeper cross-source pass and the other as the quick daily nudge, or just
+run one of the two. This skill does not currently read or suppress
+briefing-morning's output (and vice versa) — running both as-is means two
+separate messages, not one enriched one.
+
 This is the skill that reads what your other skills produced and looks for
 what none of them individually would notice: the same conclusion reached
 three different ways (redundant, weight it once), or two unrelated signals

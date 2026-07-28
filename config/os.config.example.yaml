@@ -69,8 +69,10 @@ agents:
     schedule: "0 8 * * 1"       # Monday 8am
   orchestrator:
     skill: "orchestrator"
-    enabled: false
-    schedule: "0 6 * * *"       # before briefing_morning, so its synthesis can feed it
+    enabled: false              # overlaps with briefing_morning in scope (both
+    schedule: "0 6 * * *"       # synthesize "what matters today" as one Telegram
+                                 # message) — enabling both as-is sends two similar
+                                 # pushes. See os/skills/orchestrator/SKILL.md.
   health_check:
     skill: "health-check"
     enabled: false              # turn on once 2+ other agents above are enabled

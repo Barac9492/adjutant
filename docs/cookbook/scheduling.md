@@ -8,7 +8,7 @@ your setup:
 ## Option A — Claude Code scheduled tasks (if your Claude Code build has them)
 Some Claude Code environments expose native scheduled/cron task creation.
 If yours does, create one task per enabled agent in your config, pointing it
-at the corresponding skill invocation (e.g. a task that runs `/briefing`
+at the corresponding skill invocation (e.g. a task that runs `/briefing-morning`
 daily at the configured hour). Check your environment's own docs for the
 exact tool — this varies by platform and moves fast enough that a hardcoded
 guide here would go stale.
@@ -19,7 +19,7 @@ crontab entry works:
 
 ```bash
 # crontab -e
-0 7 * * * cd /path/to/your/adjutant-installed-project && claude -p "/briefing" >> ~/adjutant.log 2>&1
+0 7 * * * cd /path/to/your/adjutant-installed-project && claude -p "/briefing-morning" >> ~/adjutant.log 2>&1
 ```
 
 Match the minute/hour to each skill's `schedule` field in your config. This
@@ -33,7 +33,7 @@ this repo on the configured schedule.
 
 ## Whichever you pick
 
-- Start with just the `briefing` and `decision_ledger_review` agents enabled
+- Start with just the `briefing_morning` and `decision_ledger_review` agents enabled
   (the setup wizard defaults to this). Confirm they fire reliably for a week
   before enabling more — a scheduler that silently stops firing is worse than
   no automation, because you'll trust output that stopped updating.

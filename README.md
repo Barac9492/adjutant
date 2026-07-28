@@ -14,7 +14,11 @@ not anyone's real deliberation — see the demo-asset rule in
 `docs/ARCHITECTURE.md`). The text is genuine output from the actual
 `os/agents/board-*.md` prompts in this repo, not scripted copy.*
 
-<!-- TODO before public launch: a screenshot of a real morning briefing. -->
+![A morning briefing delivered via Telegram — real model output, fictional scenario](docs/assets/briefing.png)
+
+*Same rule applies: fictional "Jordan" scenario, genuine output from the
+actual `os/skills/briefing-morning/SKILL.md` protocol — a real briefing is
+one short message, not a dashboard.*
 
 ## What this is
 

@@ -1,54 +1,43 @@
-# Sanitization checklist (for maintainers)
+# Sanitization checklist
 
-Run before every merge to `main`, and wire into CI as a blocking check:
+Run this before every merge to `main`:
 
 ```bash
-grep -rniE \
-  "@[a-zA-Z0-9.-]+\.(com|net|org|io|kr)|chat_id[[:space:]]*:[[:space:]]*[\"']?[0-9]{6,}" \
-  --include="*.md" --include="*.yaml" --include="*.sh" .
+bash scripts/check-sanitization.sh
 ```
 
-Note the `chat_id` branch matches on `chat_id:` alone, not `telegram.*chat_id` on
-one line — this repo's own config schema
-(`config/os.config.example.yaml`) nests them on separate lines:
-```yaml
-channels:
-  telegram:
-    chat_id: "987654321"
-```
-An earlier version of this regex required `telegram` and `chat_id` on the
-same line and missed this exact realistic shape — verified by testing it
-against the schema above (zero matches on a clearly-real-looking ID).
-Requiring the context word made the check look thorough while not actually
-covering the codebase it exists to protect.
+The script runs in GitHub Actions for pushes to `main` and for pull requests.
+It looks for a small set of high-risk text patterns: email addresses, numeric
+Telegram chat IDs, Telegram bot-token-shaped strings, and GitHub
+personal-access-token-shaped strings. It is a **tripwire**, not proof that a
+diff is safe.
 
-Plus a project-specific name/company/org sweep list — keep one in this file,
-updated whenever a contributor's PR reveals a new category worth blocking
-(a real name, a real employer, a real token format). This file is meant to
-grow; a static checklist from launch day will miss whatever leaks next.
+## Before you publish
 
-Any match is a blocking failure, not a warning — false positives are cheap to
-dismiss in review; a leaked identifier in a public repo is not reversible by
-force-pushing over it (assume it's cached/forked the moment it's pushed).
+1. Read every changed Markdown, YAML, and shell file. Confirm it contains no
+   real name, employer, client, email address, chat ID, token, calendar title,
+   or identifying figure.
+2. Run the script above. Treat any match as blocking until you understand it.
+   False positives are cheaper than a public leak.
+3. Review the rendered diff, not just the source. A plausible-looking fictional
+   name, client, or number can still make a reader think a demo contains real
+   work context.
+4. Keep personal paths, chat IDs, and connector secrets in the gitignored
+   `config/os.config.yaml` or an external secret store.
+5. If a new kind of secret or identifier appears in a contribution, extend
+   `scripts/check-sanitization.sh` with a pattern that catches it.
 
-## Images and other binary assets are NOT covered by the grep above
+## Images and other binary assets
 
-`docs/assets/*.gif`, `*.png`, and anything else binary is invisible to a
-text-only grep sweep — a screenshot or demo GIF can bake in a real name, a
-real client, a real number, or a real conversation with nothing in the diff
-to catch it. This is a real gap, found the hard way (a first attempt at a
-demo screenshot for this repo read as too specific — a named client, a
-detail that could pass for real business context — despite being entirely
-invented). For any new image asset:
+`docs/assets/*.gif`, `*.png`, and other binary files are invisible to the text
+scanner. For every new demo asset:
 
-- Prefer generating its content from a script or a checked-in `.txt`/`.md`
-  source file (so the text itself IS greppable) over hand-typing content
-  directly into a screenshot tool.
-- Before committing, read the actual rendered content yourself — extract
-  GIF frames (`ffmpeg -i file.gif -vf "select='not(mod(n\,N))'" -vsync 0
-  out_%03d.png`) and view them; don't stop at confirming the file is a valid
-  image.
-- Deliberately keep any names/numbers/details in demo content generic enough
-  that a stranger's first reaction isn't "wait, is this real?" — that
-  reaction is the failure mode, independent of whether the content is
-  technically fictional.
+- Prefer generating the visible text from a reviewed source file rather than
+  hand-typing it into a screenshot tool.
+- Inspect the rendered frames yourself. For a GIF, extract or play enough
+  frames to check every visible scene.
+- Use clearly fictional names and scenarios. Do not rely on a technical claim
+  that something is fictional if it plausibly resembles a real person or
+  client.
+
+A public push cannot be fully recalled once it has been cached or forked.

@@ -1,0 +1,17 @@
+name: Sanitization
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check-public-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check text for likely private identifiers and tokens
+        run: bash scripts/check-sanitization.sh

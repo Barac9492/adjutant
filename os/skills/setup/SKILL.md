@@ -23,7 +23,7 @@ skip to the relevant question below and edit only that field.
 If no config exists yet: read `config/os.config.example.yaml`, copy it to
 `config/os.config.yaml`. Confirm `config/os.config.yaml` is listed in
 `.gitignore` at the repo root — if it isn't, stop and fix `.gitignore` first
-(this file will contain a bot token; it must never be committed).
+(this file may contain connector secrets; it must never be committed).
 
 ### 2. Identity (fast — 2 questions max)
 Ask: name, and timezone (offer to detect it from the system clock/locale and
@@ -51,7 +51,8 @@ committing). If yes:
 - Set `decisions.board_minutes_path` to `{ledger_path}/_board` and create it
   with a `_memory/` subfolder holding empty `veteran.md`, `pragmatist.md`,
   `operator.md` files (each with `## Session Log` and `## Demands
-  outstanding` headings).
+  outstanding` headings). Also create `{ledger_path}/_weekly/` so the
+  Decision Ledger has a local fallback when no notification channel is enabled.
 
 ### 5. Board domain
 If a ledger was configured, ask one question: "What's your field? (VC,
@@ -60,21 +61,26 @@ engineering, medicine, sales, something else)" — write it to
 like a real person instead of a template.
 
 ### 6. Notification channel (optional, skip gracefully)
-Ask if they want briefings/alerts pushed somewhere, or prefer to pull by
-running commands manually. If Telegram: walk them through creating a bot via
-@BotFather (they do this outside this session — never ask them to paste a
-token into chat if you can avoid it; if they must, treat it as sensitive and
-don't echo it back in full). Get the chat_id, set
-`channels.telegram.enabled: true` and the chat_id. If they decline, leave
-channels disabled — every skill must degrade to "write to a file and say so"
-when no channel is configured; this is not optional for those skills.
+Ask whether they prefer to pull results manually or already have a tested
+notification adapter. Adjutant does not ship a Telegram transport. If they
+already have an adapter, first point them to
+`docs/cookbook/integrations.md` and have them verify a harmless, explicit
+manual delivery against the correct account. Only then set
+`channels.telegram.enabled: true` and its chat ID.
+
+Never ask them to paste a bot token into chat. If their adapter needs one,
+they should add it locally to the gitignored config or the adapter's secret
+store and the wizard should redact it. If they do not have a tested adapter,
+leave channels disabled. Connector-dependent skills must print or write their
+result locally rather than claim a message was sent.
 
 ### 7. Which agents to enable
 Show the `agents:` block from the config and ask which they want enabled day
-one. Recommend starting with just `briefing_morning` and (if they set up a ledger)
-`decision_ledger_review` — the rest add real value once the first two are
-trusted. Don't enable everything by default; an overwhelming first week is
-how people abandon a personal-automation setup.
+one. Recommend starting with `decision_ledger_review` if they set up a ledger.
+Only recommend `briefing_morning` after they have completed its manual
+source and delivery preflight in `docs/cookbook/integrations.md`. Do not
+enable everything by default; an overwhelming first week is how people abandon
+a personal-automation setup.
 
 ### 8. Wire the scheduler
 This repo does not install a scheduler. Tell the user plainly what to do next
@@ -85,10 +91,10 @@ this varies by platform and getting it wrong here silently breaks every
 "scheduled" skill.
 
 ### 9. Confirm and close
-Print the final config (redact the Telegram token/chat_id as `***`), tell
-them exactly what to try first (e.g. "run `/today` right now" or "run
-`/decide list`"), and stop. Don't over-explain — let them experience the
-system working.
+Print the final config (redact every connector secret and chat ID as `***`),
+tell them exactly what to try first (`/decide list` if they configured a
+ledger, otherwise `/today` only when a notes vault exists), and stop. Do not
+over-explain — let them experience the system working.
 
 ## Hard rules
 

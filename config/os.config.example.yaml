@@ -9,7 +9,7 @@ identity:
   language: "en"                # "en" | "ko" | "auto" (match source content)
 
 # Where your durable knowledge lives. If you don't use a notes vault,
-# leave vault_path empty — skills that need it will say so and skip.
+# leave vault.path empty — skills that need it will say so and skip.
 vault:
   path: ""                      # e.g. "/Users/you/Documents/Notes"
   index_file: ""                # e.g. "index.md" — your vault's table-of-contents note
@@ -19,14 +19,17 @@ decisions:
   ledger_path: ""               # e.g. "{vault.path}/Decisions"
   board_minutes_path: ""        # e.g. "{vault.path}/Decisions/_board"
 
-# Notification channel. Only one is required to get value from this OS.
+# Notification channel. Adjutant does not bundle a Telegram or email connector.
+# Leave a channel disabled until you have tested an adapter yourself. Any
+# connector credential in this file stays local because os.config.yaml is ignored.
 channels:
   telegram:
     enabled: false
-    chat_id: ""                 # NEVER hardcode this in a skill file — read from here
+    chat_id: ""                 # only after a tested Telegram adapter is configured
+    bot_token: ""               # optional: only for your adapter; never commit or paste into chat
   email:
-    enabled: false
-    draft_only: true            # hard default — this OS never sends email on your behalf
+    enabled: false               # only after a tested mail connector is configured
+    draft_only: true             # hard default — this OS never sends email on your behalf
 
 # The Board — three adversarial seats. Only the veteran needs per-user
 # tuning (the pragmatist and operator roles are domain-independent by
@@ -40,12 +43,12 @@ board:
 # Scheduled agents this OS ships. `skill` is the exact os/skills/<dir> (or
 # skill subcommand) each entry runs — kept explicit here because the config
 # key and the skill directory name are not always identical.
-# Wire these into your own scheduler (cron, Claude Code scheduled tasks, etc.)
-# — this repo does not install a scheduler for you. See docs/cookbook/scheduling.md.
+# Wire these into your own scheduler only after a manual test. See
+# docs/cookbook/scheduling.md and docs/cookbook/integrations.md.
 agents:
   briefing_morning:
     skill: "briefing-morning"   # os/skills/briefing-morning/SKILL.md
-    enabled: true
+    enabled: false              # enable after a manual source and delivery test
     schedule: "0 7 * * *"       # daily 7am
   followups:
     skill: "followups"
@@ -69,11 +72,9 @@ agents:
     schedule: "0 8 * * 1"       # Monday 8am
   orchestrator:
     skill: "orchestrator"
-    enabled: false              # overlaps with briefing_morning in scope (both
-    schedule: "0 6 * * *"       # synthesize "what matters today" as one Telegram
-                                 # message) — enabling both as-is sends two similar
-                                 # pushes. See os/skills/orchestrator/SKILL.md.
+    enabled: false               # overlaps with briefing_morning in scope
+    schedule: "0 6 * * *"       # synthesize "what matters today" as one message
   health_check:
     skill: "health-check"
-    enabled: false              # turn on once 2+ other agents above are enabled
+    enabled: false               # turn on once 2+ other agents above are enabled
     schedule: "0 18 * * *"

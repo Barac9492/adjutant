@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# adjutant installer — copies the os/ tree into ~/.claude, then tells you
-# to run /setup yourself (it doesn't launch Claude Code for you).
+# adjutant installer — copies the os/ tree into ~/.claude and installs the
+# project-level CLAUDE.md doctrine without overwriting an existing file.
 set -euo pipefail
 
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_CLAUDE="$REPO_DIR/CLAUDE.md"
 
-echo "adjutant installer"
-echo "  source: $REPO_DIR/os"
-echo "  target: $CLAUDE_DIR"
-echo
+printf '%s\n' "adjutant installer"
+printf '  source: %s\n' "$REPO_DIR/os"
+printf '  Claude Code target: %s\n' "$CLAUDE_DIR"
+printf '  project doctrine: %s\n\n' "$PROJECT_CLAUDE"
 
 if [ ! -d "$CLAUDE_DIR" ]; then
   echo "error: $CLAUDE_DIR does not exist. Install Claude Code first: https://claude.com/claude-code"
@@ -41,18 +42,21 @@ for skill_dir in "$REPO_DIR"/os/skills/*/; do
 done
 
 echo
+echo "Project instructions:"
 if [ -f "$REPO_DIR/os/CLAUDE.md" ]; then
-  if [ -f "$CLAUDE_DIR/../CLAUDE.md" ] || [ -f "./CLAUDE.md" ]; then
-    echo "Note: os/CLAUDE.md was NOT auto-merged into your project's CLAUDE.md."
-    echo "      Read $REPO_DIR/os/CLAUDE.md and fold in what you want — this file"
-    echo "      encodes the barbell pipeline and delivery gates this OS assumes."
+  if [ -e "$PROJECT_CLAUDE" ]; then
+    echo "  skip (exists): CLAUDE.md — keep your project instructions and manually merge"
+    echo "  $REPO_DIR/os/CLAUDE.md if you want adjutant's barbell pipeline and gates."
+  else
+    cp "$REPO_DIR/os/CLAUDE.md" "$PROJECT_CLAUDE"
+    echo "  installed: CLAUDE.md — Claude Code will load the adjutant doctrine in this repo."
   fi
 fi
 
 echo
-echo "Install complete. Next: open Claude Code in this repo and run:"
+echo "Install complete. Next: open Claude Code in this repository and run:"
 echo
 echo "    /setup"
 echo
-echo "That's the onboarding wizard — it writes config/os.config.yaml and gets"
-echo "you a working /today or /decide within a few minutes."
+echo "Start with /decide add for a local-only first result. /today and external"
+echo "automation need the notes and connector setup described in the README."

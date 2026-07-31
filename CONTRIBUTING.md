@@ -34,8 +34,8 @@ before merge, no exceptions. Before opening a PR that touches `os/` or
 
 ## PR checklist
 
-- [ ] `grep` sweep from `docs/cookbook/sanitization-checklist.md` comes back
-      clean on your diff.
+- [ ] `bash scripts/check-sanitization.sh` passes on your diff, and you have
+      visually inspected any changed demo assets.
 - [ ] If you added or renamed a skill, `config/os.config.example.yaml`'s
       `agents:` block is updated to match (see the `skill:` field convention).
 - [ ] If you touched an agent's memory format, `docs/decision-format.md` is

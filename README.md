@@ -1,51 +1,68 @@
 # adjutant
 
-*A working AI chief of staff, running for a year on real work — open-sourced.
-Not a framework. Fork it, configure it, make it yours.*
+*A forkable Claude Code operating system for turning open decisions and scattered notes into action.*
 
-> **Status: pre-launch.** This is the extracted, sanitized v1 of a personal
-> automation stack. It hasn't been through its own private beta yet — see
-> `docs/ARCHITECTURE.md` for what's shipped vs. roadmapped.
+[한국어](README.ko.md)
 
-![The board convening on a staged decision — real model output, fictional scenario](docs/assets/demo.gif)
+> **Status: public pre-beta.** Adjutant is an opinionated, sanitized template
+> extracted from a personal workflow. Its local core is ready to try; external
+> integrations and scheduled automation require your own setup. It is not a
+> hosted assistant or a one-click automation product.
 
-*The board arguing about a fictional decision (a fabricated "Jordan" scenario,
-not anyone's real deliberation — see the demo-asset rule in
-`docs/ARCHITECTURE.md`). The text is genuine output from the actual
-`os/agents/board-*.md` prompts in this repo, not scripted copy — shown here
-as it appears in-session; the actual minutes file it also produces follows
-the single-file format in `docs/decision-format.md`.*
+![The board convening on a staged decision. Real model output, fictional scenario.](docs/assets/demo.gif)
 
-![A morning briefing delivered via Telegram — real model output, fictional scenario](docs/assets/briefing.png)
+*The board arguing about a fictional "Jordan" scenario, not anyone's real
+deliberation. The text is genuine output from the prompts in
+`os/agents/board-*.md`, not scripted copy. The minutes it produces follow the
+single-file format in `docs/decision-format.md`.*
 
-*Same rule applies: fictional "Jordan" scenario, genuine output from the
-actual `os/skills/briefing-morning/SKILL.md` protocol — a real briefing is
-one short message, not a dashboard.*
+![A morning briefing delivered via Telegram. Real model output, fictional scenario.](docs/assets/briefing.png)
+
+*This uses the same rule: a fictional "Jordan" scenario and genuine output from
+`os/skills/briefing-morning/SKILL.md`. A real briefing is one short message,
+not a dashboard.*
 
 ## What this is
 
-Seven scheduled agents, an adversarial three-seat board that argues
-about your open decisions and remembers what it told you last time, a
-Decision Ledger that refuses to let you re-analyze the same choice forever,
-and the barbell pipeline (cheap scout → your best model plans → cheap build →
-fresh-context review) that makes all of it maintainable instead of a pile of
-one-off prompts. All of it runs on stock Claude Code — no new runtime, no
-service to sign up for. You clone this, run one wizard, and you have a
-working system by the end of a coffee.
+Adjutant gives Claude Code a persistent decision and execution cadence:
 
-## Why fork instead of install
+- a three-seat adversarial board that remembers its outstanding challenges;
+- a Decision Ledger that interrupts repeated analysis when the missing input is
+  commitment, not another model; and
+- a barbell delivery pipeline: cheap scout, strongest planner, cheap builder,
+  fresh-context review.
 
-This isn't a library you `npm install` and forget. It's closer to dotfiles:
-you're meant to read it, cut what you don't want, and bend the rest until it
-fits your life. The `/setup` wizard gets you a working baseline in minutes;
-everything after that is yours to shape.
+It runs on stock Claude Code and local Markdown files. You fork it, keep what
+helps, and adapt the rest to your own work.
+
+## Who it helps
+
+This is a good fit if you:
+
+- already use Claude Code and are comfortable configuring a local folder;
+- keep notes in Markdown or can point the system at a notes folder; and
+- want help closing consequential decisions or keeping execution honest.
+
+It is **not** a fit yet if you need calendar, email, or Telegram automation to
+work immediately with no connector setup. Those workflows are protocols in this
+repository, not bundled integrations.
 
 ## Quickstart
 
+Prerequisites: Claude Code, Git, and optionally a local Markdown notes vault.
+A notes vault is required for `/today` and `/briefing`; it is not required for
+`/decide`.
+
 ```bash
-git clone <this-repo> adjutant && cd adjutant
+git clone https://github.com/Barac9492/adjutant.git adjutant
+cd adjutant
 ./install.sh
 ```
+
+The installer copies the skills and agents into `~/.claude` without overwriting
+existing files. It also copies the operating doctrine to this repository's root
+as `CLAUDE.md` unless you already have one, so Claude Code can load it for this
+project.
 
 Then open Claude Code in this directory and run:
 
@@ -53,50 +70,51 @@ Then open Claude Code in this directory and run:
 /setup
 ```
 
-That's the onboarding wizard — it interviews you (name, timezone, where your
-notes live, what decisions you're sitting on, how you want to be notified)
-and writes `config/os.config.yaml`. Nothing else in this repo reads personal
-data from anywhere else; that one file is the entire seam between "generic
-template" and "your setup."
+Start with `/decide add` for a first useful result without any external
+connection. Try `/today` after you configure a notes vault.
 
-Try `/today` or `/decide list` right after setup — you should see real output
-within a couple of minutes, not a wall of configuration left to do.
+## What works now and what needs setup
 
-## What's in the box (v1)
+| Surface | Included here | You still need |
+| --- | --- | --- |
+| `/decide` | Decision files and the re-analysis gate | A decision ledger created by `/setup` |
+| `/board convene` | Three agents and local, append-only memory | An open decision and the ledger paths from `/setup` |
+| `/today`, `/briefing` | Local Markdown workflows | A readable Markdown notes vault |
+| Barbell delivery pipeline | `CLAUDE.md`, scout, implementer, reviewer, and gates | Work in the cloned repository or merge the doctrine into your own project |
+| Scheduled skills | Seven workflow protocols plus the Decision Ledger weekly review | A scheduler plus a successful manual run of each routine |
+| Email, calendar, Telegram | Safe workflow instructions only | Your own tested connector or adapter. None ships with Adjutant. |
 
-| Piece | What it does |
-|---|---|
-| `/board convene` | Three standing critics — a domain veteran, a downside-protection voice, an execution-accountability voice — argue about your open decisions and remember what they told you last time. |
-| `/decide` | A Decision Ledger that tracks open high-stakes decisions and refuses to produce fresh analysis on a decision you're already stalling on — it forces a review instead. |
-| `/briefing`, `/today` | Pull your notes vault into a current-state summary or a prioritized plan for today. |
-| `briefing-morning`, `followups`, `meeting-prep`, `email-triage`, `orchestrator`, `weekly-synthesis`, `health-check` | Schedulable agents — see `os/skills/`. `email-triage` classifies and drafts only; it never sends on your behalf. |
-| `os/CLAUDE.md` | The barbell pipeline (scout → plan → implement → review) and delivery gates every other piece assumes. |
-| `os/agents/delivery-critic.md`, `persona-qa-player.md` | Fresh-context gates: one reviews any deliverable before you see it, the other plays a deployed app as a named persona before you open the URL yourself. |
+Read [the integration guide](docs/cookbook/integrations.md) before enabling a
+connector-dependent skill, and [the scheduling guide](docs/cookbook/scheduling.md)
+before creating cron jobs.
 
-See `docs/ARCHITECTURE.md` for the full extraction rationale and
-`docs/patterns.md` for the reusable engineering patterns behind the pipeline.
+## Why fork instead of install
 
-## What this needs from you
+This is closer to dotfiles than a library you install and forget. You are meant
+to read it, cut what you do not need, and bend the rest until it fits your
+life. The `/setup` wizard creates a useful baseline; the fork is deliberately
+yours to shape.
 
-- **A scheduler.** This repo ships the *what*, not the *when* — see
-  `docs/cookbook/scheduling.md` for wiring up Claude Code scheduled tasks,
-  cron, or whatever you already run.
-- **Honesty about maintenance.** If you fork this and go quiet, that's fine —
-  it's yours now. If you're contributing back, see `ROADMAP.md` for where
-  help is wanted and `CONTRIBUTING.md` for the ground rules.
+## Specializing it for your field
 
-## Specializing this for your field
+`examples/verticals/` contains a worked venture-capital example. More vertical
+examples are welcome through pull requests. The board's veteran seat is the
+best starting point: set `board.veteran.domain` in your config, then rewrite
+`os/agents/board-veteran.md` only if you need a genuinely different voice.
 
-`examples/verticals/` has a worked example of retuning the board and ledger
-for a specific domain (currently: venture capital — `vc.md`). More verticals
-are welcome via PR; see `CONTRIBUTING.md`. The board's veteran seat is the
-one piece most worth customizing — `board.veteran.domain` in your config
-gets you most of the way there (see `vc.md` for how far a single field goes).
-If you want more than that — a distinct voice, not just a distinct frame of
-reference — rewrite the persona note directly in
-`os/agents/board-veteran.md`.
+## Privacy and safety
+
+- `config/os.config.yaml` is gitignored and is the only place a local setup
+  should hold personal paths, chat IDs, or connector secrets.
+- Connector-dependent skills are intentionally draft-only or confirmation-first
+  for actions that affect other people. `email-triage` never sends email.
+- `scripts/check-sanitization.sh` runs locally and in GitHub Actions on pushes
+  and pull requests. It is a tripwire, not a substitute for reading every
+  demo asset and diff before publishing.
+
+See [the sanitization checklist](docs/cookbook/sanitization-checklist.md) and
+[CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
-MIT — see `LICENSE`. (Placeholder choice; swap before public launch if you
-want something else, e.g. Apache-2.0 for an explicit patent grant.)
+[MIT](LICENSE).
